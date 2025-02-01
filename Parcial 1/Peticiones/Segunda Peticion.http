@@ -1,0 +1,3 @@
+//Con Parametros
+GET https://jsonplaceholder.typicode.com/posts/1
+Content-Type: application/json
