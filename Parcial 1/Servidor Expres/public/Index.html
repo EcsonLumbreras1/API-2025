@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidor Express Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .data {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Servidor Express Online</h1>
+    <div class="data">
+        <h2>Respuesta del Servidor:</h2>
+        <pre id="serverResponse">Cargando...</pre>
+    </div>
+
+    <button onclick="enviarDatos()">Enviar Datos al Servidor</button>
+
+    <script>
+        function enviarDatos() {
+            const data = {
+                usuario: "Bob Esponja",
+                edad: 15
+            };
+
+            fetch('http://localhost:3001/api/mensaje?rol=admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 12345'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('serverResponse').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('serverResponse').textContent = "Error al conectar con el servidor.";
+                console.error('Error:', error);
+            });
+        }
+
+        // Cargar respuesta inicial del servidor al abrir la página
+        fetch('http://localhost:3001/api/mensaje')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('serverResponse').textContent = data;
+            })
+            .catch(error => {
+                document.getElementById('serverResponse').textContent = "Error al conectar con el servidor.";
+                console.error('Error:', error);
+            });
+    </script>
+
+</body>
+</html>
